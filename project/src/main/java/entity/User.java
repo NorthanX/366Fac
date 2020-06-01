@@ -13,6 +13,9 @@ public class User {
     private Date Regtime;
     private String role;
 
+    public User() {
+    }
+
     public User(String name, String mail) {
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -32,9 +35,6 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public User() {
     }
 
     public String getUserID() {
