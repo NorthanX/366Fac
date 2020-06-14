@@ -1,0 +1,246 @@
+<!doctype html>
+<!-- suppress ThymeleafVariablesResolveInspection -->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>博文空间 | TSS 技术博客网站</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="./js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="./js/bootstrap.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+     <div class="container">
+          <div class="row clearfix">
+               <div class="col-md-12 column">
+                    <nav class="navbar navbar-default navbar-static-top navbar-inverse" role="navigation">
+                         <div class="navbar-header">
+                              <button type="button" class="navbar-toggle" data-toggle="collapse"
+                                   data-target="#bs-example-navbar-collapse-1"><span
+                                   class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                                   class="icon-bar"></span><span class="icon-bar"></span></button>
+                              <a class="navbar-brand" href="#">TSS Blog</a>
+                         </div>
+
+                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                         <ul class="nav navbar-nav">
+                              <li>
+                                   <a href="/aboutUs">关于我们</a>
+                              </li>
+                         </ul>
+                         <form class="navbar-form navbar-left" role="search" id="searchform" action="/search">
+                              <div class="form-group">
+                                   <input type="text" class="form-control"/>
+                              </div>
+                              <button type="submit" class="btn btn-default" href="/searchResult" onclick="f_search()">搜索</button>
+                         </form>
+                         <ul class="nav navbar-nav navbar-right">
+                              <li th:if="${create} gt 0">
+                                   <a href="/in">登录</a>
+                              </li>
+                              <li th:if="${create} gt 0">
+                                   <a href="/register">注册</a>
+                              </li>
+                              <li th:if="${create} le 0">
+                                   <img th:src="${user.Userpic}" class="img-circle"></img>
+                              </li>
+                              <li th:if="${create} le 0">
+                                   <a href="/user/show">个人信息</a>
+                              </li>
+                              <li th:if="${create} le 0">
+                                   <a href="/blogList">博文空间</a>
+                              </li>
+                              <li th:if="${create} le 0">
+                                   <a href="/writeBlog" class="btn btn-default">发表博文</a>
+                              </li>
+                              <li onselectstart="return false;">&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                              <li th:if="${create} le 0">
+                                   <a href="/userLogout" class="btn btn-default">退出登录</a>
+                              </li>
+                              <li onselectstart="return false;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                         </ul>
+                         </div>
+                    </nav>
+               </div>
+          </div>
+          <div class="row clearfix">
+            <div class="row clearfix">
+                <div class="col-md-8 column">
+                    <div style="background-color: rgb(243, 243, 243); border-radius: 10px; margin-top: 5px; margin-bottom: 40px; padding-top: 10px; padding-left: 5px; padding-right: 10px; padding-bottom: 30px;">
+                        <div class="row pre-scrollable" style="background-color: rgb(243, 243, 243); border-radius: 10px; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 40px; padding-top: 10px; padding-left: 30px; padding-right: 30px; padding-bottom: 30px;">
+                            <div th:if="${create} le 0" th:each="blog,blogstate:${blogs}">
+                                <tr>
+                                    <div class="articles" style="max-height: 1000px; background-color: white; border-radius: 10px; margin-top: 15px; margin-bottom: 10px; padding-top: 10px; padding-left: 30px; padding-right: 30px; padding-bottom: 30px;">
+                                        <div class="blogAticle">
+                                            <div class="articleHeader" >
+                                                <h2><a href="/blog/${blog.id}"><td th:text="${blog.Title}">123</td></a></h2>
+                                            </div>
+                                            <!--<div class="articleContent">-->
+                                            <!--<p>$!{vo.article.describes}</p>///-->
+                                            <!--</div>-->
+                                            <div class="articleFooter">
+                                                <div>
+                                                <!--<div><i class="fa fa-calendar" aria-hidden="true"></i><span><td th:text="${date.format('yyyy-MM-dd',${blog.CreateDate}})"></td></span>-->
+                                                <!--</div>-->
+                                                <div>
+                                                    <i class="fa fa-divst" aria-hidden="true"></i>
+                                                    <h5 style="color: grey; margin-top: 15px; margin-left: 5px;"><td th:text="${blog.type}">456</td></h5>
+                                                </div>
+                                                <!--<div><i class="fa fa-tags" aria-hidden="true"></i>-->
+                                                <!--<tr th:each="tag:${vo.tags}">-->
+                                                <!--<span><td th:text="${tag.TagName}"></td></span>-->
+                                                <!--</tr>-->
+                                                <!-- </div>-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 column column-right" style="margin-top: 5px;">
+                    <span onselectstart="return false;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <a href="#"><img alt="80x80" src="./img/example-80.png" class="img-circle"/></a>
+                    <span onselectstart="return false;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <a style="font-size: x-large;" href="#">猫猫猫猫</a>
+                </br></br>
+                    <p style="color: grey;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;个性签名</p>
+                </br>
+                    <span onselectstart="return false;">&nbsp;&nbsp;&nbsp;</span>
+                    <button type="button" class="btn btn-lg btn-primary" style="width:140px;">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;点赞文章
+                    </button>
+                    <span onselectstart="return false;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <button type="button" class="btn btn-lg btn-primary" style="width:140px;">关注</button>
+                </br></br>
+                    <div class="row pre-scrollable" style="height: 800px; background-color: rgb(243, 243, 243); border-radius: 10px; margin-top: 5px; margin-bottom: 40px; padding-top: 10px; padding-left: 30px; padding-right: 30px; padding-bottom: 30px;">
+                         <!-- Comment Area Start -->
+                        <div class="comment_area section_padding_50 clearfix"  id="comment-container">
+                            <div th:fragment="commentList">
+                                <h4 class="mb-30"><span th:text="${totalComment}">0</span> Comments</h4>
+                                    <ol>
+                                    <!-- Single Comment Area -->
+                                        <li class="single_comment_area" th:each="comment : ${comments}">
+                                            <div class="comment-wrapper d-flex" >
+                                            <!-- Comment Meta -->
+                                                <div class="comment-author">
+                                                    <img src="img/blog-img/19.jpg" th:src="@{/img/blog-img/19.jpg}" alt="">
+                                                </div>
+                                                <!-- Comment Content -->
+                                                <div class="comment-content">
+                                                    <span class="comment-date text-muted" th:text="${#dates.format(comment.commentCreateTime,'yyyy-MM-dd HH:mm')}">27 Aug 2018</span>
+                                                    <h5 th:text="${comment.commentator}">Brandon Kelley</h5>
+                                                    <p th:text="${comment.commentBody}">Neque porro qui squam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora.</p>
+                                                    <a href="#">Like</a>
+                                                    <a class="active" th:attr="data-commentid=${comment.commentId},data-commentnickname=${comment.commentator}" onclick="reply(this)">Reply</a>
+                                                </div>
+                                            </div>
+                                            <ol class="children" th:if="${#arrays.length(comment.replyComments)}>0">
+                                                <li class="single_comment_area" th:each="reply : ${comment.replyComments}">
+                                                    <div class="comment-wrapper d-flex">
+                                                        <!-- Comment Meta -->
+                                                        <div class="comment-author">
+                                                            <img src="img/blog-img/18.jpg" th:src="@{/img/blog-img/18.jpg}" alt="">
+                                                        </div>
+                                                        <!-- Comment Content -->
+                                                        <div class="comment-content">
+                                                            <span class="comment-date text-muted" th:text="${#dates.format(reply.commentCreateTime,'yyyy-MM-dd HH:mm')}">27 Aug 2018</span>
+                                                            <span th:text="|@ ${reply.parentComment.commentator}|" class="m-teal">@ 小白</span><h5 th:text="${reply.commentator}">Brandon Kelley</h5>
+                                                            <p th:text="${reply.commentBody}">Neque porro qui squam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora.</p>
+                                                            <a href="#" >Like</a>
+                                                            <a class="active" th:attr="data-commentid=${reply.commentId},data-commentnickname=${reply.commentator}" onclick="reply(this)">Reply</a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ol>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <!-- Leave A Comment -->
+                            <div class="leave-comment-area section_padding_50 clearfix">
+                                <div class="comment-form">
+                                    <h4 class="mb-30">Leave A Comment</h4>
+
+                                    <!-- Comment Form -->
+                                    <div class="ui form">
+                                        <input  type="hidden" name="blog.id" th:value="${blogDetailVO.blogId}">
+                                        <input  type="hidden" name="parent.commentid" value="-1">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="nickname" id="contact-name" placeholder="Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="email" class="form-control" name="email" id="contact-email" placeholder="Email">
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea class="form-control" name="content" id="message" cols="30" rows="10" placeholder="Message"></textarea>
+                                        </div>
+                                        <button type="button" id="commentpost-btn" class="btn contact-btn">Post Comment</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            </div>
+            </div>
+        </div>
+     </div>
+     <script type="text/javascript">
+          function f_search(){
+               document.getElementById("searchform").submit()
+          }
+     </script>
+<!--     <script type="text/javascript">-->
+<!--         let oMenu = my$('navigator');-->
+<!--         let oUL = getFirstElementChild(oMenu);-->
+<!--         // 获取 id-->
+<!--         function my$(id) {-->
+<!--             return document.getElementById(id);-->
+<!--         }-->
+<!--         // 获取第一个元素-->
+<!--         function getFirstElementChild(element) {-->
+<!--             let node;-->
+<!--             let nodes = element.childNodes;-->
+<!--             let i=0;-->
+<!--             //遍历返回元素节点，当元素节点为空时返回null-->
+<!--             while (node = nodes[i++]){-->
+<!--                 if (node.nodeType === 1){-->
+<!--                     return node;-->
+<!--                 }-->
+<!--             }-->
+<!--             return null;-->
+<!--         }-->
+<!--         // 添加注册事件-->
+<!--         for (let i=0;i<oUL.children.length;i++){-->
+<!--             let oLi = oUL.children[i];-->
+<!--             oLi.onclick = LiClick;-->
+<!--         }-->
+<!--         function LiClick() {-->
+<!--             for (let i=0;i<oUL.children.length;i++){-->
+<!--                 let oLi = oUL.children[i];-->
+<!--                 oLi.className = '';-->
+<!--             }-->
+<!--             this.className = 'active';-->
+<!--             return false;-->
+<!--         }-->
+<!--     </script>-->
+</body>
+</html>

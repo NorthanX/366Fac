@@ -1,0 +1,207 @@
+<!doctype html>
+<!-- suppress ThymeleafVariablesResolveInspection -->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>TSS 技术博客网站</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/editormd/css/editormd.css" />
+    <link rel="shortcut icon" href="/img/logo.png" />
+    <link rel="stylesheet" href="/css/markdown.css" />
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/editormd/jquery.min.js"></script>
+    <script src="/editormd/editormd.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+     <div class="container">
+          <div class="row clearfix">
+               <div class="col-md-12 column">
+                    <nav class="navbar navbar-default navbar-static-top navbar-inverse" role="navigation">
+                         <div class="navbar-header">
+                              <button type="button" class="navbar-toggle" data-toggle="collapse"
+                                   data-target="#bs-example-navbar-collapse-1"><span
+                                   class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                                   class="icon-bar"></span><span class="icon-bar"></span></button>
+                              <a class="navbar-brand" href="#">TSS Blog</a>
+                         </div>
+
+                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                         <ul class="nav navbar-nav">
+                              <li>
+                                   <a href="/aboutUs">关于我们</a>
+                              </li>
+                         </ul>
+                         <form class="navbar-form navbar-left" role="search" id="searchform" action="/search">
+                              <div class="form-group">
+                                   <input type="text" class="form-control"/>
+                              </div>
+                              <button type="submit" class="btn btn-default" href="/searchResult" onclick="f_search()">搜索</button>
+                         </form>
+                         <ul class="nav navbar-nav navbar-right">
+                              <li th:if="${create} gt 0">
+                                   <a href="/in">登录</a>
+                              </li>
+                              <li th:if="${create} gt 0">
+                                   <a href="/register">注册</a>
+                              </li>
+                              <li th:if="${create} le 0">
+                                   <img th:src="${user.Userpic}" class="img-circle"></img>
+                              </li>
+                              <li th:if="${create} le 0">
+                                   <a href="/user/show">个人信息</a>
+                              </li>
+                              <li th:if="${create} le 0">
+                                   <a href="/blogList">博文空间</a>
+                              </li>
+                              <li th:if="${create} le 0">
+                                   <a href="/writeBlog" class="btn btn-default">发表博文</a>
+                              </li>
+                              <li onselectstart="return false;">&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                              <li th:if="${create} le 0">
+                                   <a href="/userLogout" class="btn btn-default">退出登录</a>
+                              </li>
+                              <li onselectstart="return false;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                         </ul>
+                         </div>
+                    </nav>
+               </div>
+          </div>
+          <div class="row clearfix">
+            <div class="col-md-12 column">
+               <div style="border-radius: 10px; margin-bottom: 40px; padding-top: 0px; padding-left: 30px; padding-right: 30px; padding-bottom: 30px;">
+                   <center><form name="mdEditorForm" >
+                       <div>
+                           <h4 style="margin-bottom: 10px;"><label>博客名称</label></h4>
+                           <input class="form-control" style="width: 540px;" type="text" placeholder="请输入博客名称" name="title" required="" id="title" />
+                       </div>
+                       <div >
+                           <h4><label>分区选择</label></h4>
+                           <select id="category" name="category" class="form-control"  style="width: 540px;">
+                               <option value="CCPP">C/C++</option>
+                               <option value="Java">Java</option>
+                               <option value="Python">Python</option>
+                               <option value="前端">前端</option>
+                               <option value="后端">后端</option>
+                               <option value="算法">算法</option>
+                               <option value="else">其它</option>
+                           </select>
+                       </div>
+                       <div >
+                           <h4 style="margin-top: 15px; margin-bottom: 10px;"><label>添加Tag</label></h4>
+                           <input class="form-control" style="width: 540px; margin-bottom: 25px;" type="text" id="tag" name="tag" placeholder="tag之间用逗号隔开">
+                       </div>
+                       <!-- 文章的主体内容 textarea -->
+                       <div id="article-content">
+                        <textarea name="content" id="content" style="display:none;"> </textarea>
+                        </div>
+                   </form></center>
+               </div>
+            </div>
+       </div>
+        </div>
+     </div>
+     <script type="text/javascript">
+          function f_search(){
+               document.getElementById("searchform").submit()
+          }
+     </script>
+     <script type="text/javascript">
+        var testEditor;
+        $(function() {
+            //这是一个最简单的Editormd配置，往后我们要修改Editormd的
+            //功能或者样式，就改这里的配置就可以了
+            testEditor = editormd("article-content", {
+                width: "90%",
+                height: 640,
+                syncScrolling: "single",
+                path: "/editormd/lib/",
+                saveHTMLToTextarea: true,
+                toolbarIcons: function() {
+                    return ["undo", "redo", "clear", "|", "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase",
+                        "|", "h1", "h2", "h3", "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "link", "image", "|",
+                        "code", "code-block", "table", "|", "watch", "preview", "fullscreen", "search", "||", "index", "releaseIcon"
+                    ]
+                },
+                theme: "light",
+                previewTheme: "default",
+                editorTheme: "eclipse",
+                tex: true,
+                toolbarAutoFixed: false,
+                imageUpload: true,
+                imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                imageUploadURL: "/UpdateImage", //这个链接是project中的一个相对目录
+                onload: function() {
+                    console.log('onload', this);
+                },
+                toolbarIconTexts: {
+                    releaseIcon: "<span bgcolor=\"gray\">发布</span>",
+                    index: "<span bgcolor=\"red\">返回</span>",
+                },
+    
+                toolbarHandlers: {
+                    releaseIcon: function(cm, icon, cursor, selection) {
+                        //表单提交
+                        mdEditorForm.method = "post";
+                        mdEditorForm.action = "/AddBlog"; //提交至服务器的路径
+                        mdEditorForm.submit();
+                    },
+                    index: function() {
+                        window.location.href = "/index";
+                    },
+                }
+            });
+        });
+    </script>
+<!--     <script type="text/javascript">-->
+<!--         let oMenu = my$('navigator');-->
+<!--         let oUL = getFirstElementChild(oMenu);-->
+<!--         // 获取 id-->
+<!--         function my$(id) {-->
+<!--             return document.getElementById(id);-->
+<!--         }-->
+<!--         // 获取第一个元素-->
+<!--         function getFirstElementChild(element) {-->
+<!--             let node;-->
+<!--             let nodes = element.childNodes;-->
+<!--             let i=0;-->
+<!--             //遍历返回元素节点，当元素节点为空时返回null-->
+<!--             while (node = nodes[i++]){-->
+<!--                 if (node.nodeType === 1){-->
+<!--                     return node;-->
+<!--                 }-->
+<!--             }-->
+<!--             return null;-->
+<!--         }-->
+<!--         // 添加注册事件-->
+<!--         for (let i=0;i<oUL.children.length;i++){-->
+<!--             let oLi = oUL.children[i];-->
+<!--             oLi.onclick = LiClick;-->
+<!--         }-->
+<!--         function LiClick() {-->
+<!--             for (let i=0;i<oUL.children.length;i++){-->
+<!--                 let oLi = oUL.children[i];-->
+<!--                 oLi.className = '';-->
+<!--             }-->
+<!--             this.className = 'active';-->
+<!--             return false;-->
+<!--         }-->
+<!--     </script>-->
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WriteBlog</title>
+    <link rel="stylesheet" href="/editormd/css/editormd.css" />
+    <link rel="shortcut icon" href="/img/16version.ico" />
+    <link rel="stylesheet" href="/css/markdown.css" />
+</head>
+
+<body>
+    <div>
+        <!--博客表单-->
+        <form name="mdEditorForm">
+
+            <div>
+                Title： <input type="text" name="title">
+            </div>
+            <div>
+                <div><label>Category</label></div>
+                <select id="category" name="category">
+                            <option value="CCPP">C/C++</option>
+                            <option value="Java">Java</option>
+                            <option value="Python">Python</option>
+                            <option value="frontEnd">前端</option>
+                            <option value="backEnd">后端</option>
+                            <option value="algorithm">算法</option>
+                            <option value="else">其它</option>
+                        </select>
+            </div>
+            <div><label>Tag</label><input type="text" id="tag" name="tag" placeholder="tag之间用逗号隔开"></div>
+            <!-- 文章的主体内容 textarea -->
+            <div id="article-content">
+                <textarea name="content" id="content" style="display:none;"> </textarea>
+            </div>
+        </form>
+    </div>
+</body>
+<script src="/editormd/jquery.min.js"></script>
+<script src="/editormd/editormd.js"></script>
+
+<script type="text/javascript">
+    var testEditor;
+    $(function() {
+        //这是一个最简单的Editormd配置，往后我们要修改Editormd的
+        //功能或者样式，就改这里的配置就可以了
+        testEditor = editormd("article-content", {
+            width: "90%",
+            height: 640,
+            syncScrolling: "single",
+            path: "/editormd/lib/",
+            saveHTMLToTextarea: true,
+            toolbarIcons: function() {
+                return ["undo", "redo", "clear", "|", "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase",
+                    "|", "h1", "h2", "h3", "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "link", "image", "|",
+                    "code", "code-block", "table", "|", "watch", "preview", "fullscreen", "search", "||", "index", "releaseIcon"
+                ]
+            },
+            theme: "light",
+            previewTheme: "default",
+            editorTheme: "eclipse",
+            tex: true,
+            toolbarAutoFixed: false,
+            imageUpload: true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "/UpdateImage", //这个链接是project中的一个相对目录
+            onload: function() {
+                console.log('onload', this);
+            },
+            toolbarIconTexts: {
+                releaseIcon: "<span bgcolor=\"gray\">发布</span>",
+                index: "<span bgcolor=\"red\">返回</span>",
+            },
+
+            toolbarHandlers: {
+                releaseIcon: function(cm, icon, cursor, selection) {
+                    //表单提交
+                    mdEditorForm.method = "post";
+                    mdEditorForm.action = "/AddBlog"; //提交至服务器的路径
+                    mdEditorForm.submit();
+                },
+                index: function() {
+                    window.location.href = "/index";
+                },
+            }
+        });
+    });
+</script>
+
+</html>
